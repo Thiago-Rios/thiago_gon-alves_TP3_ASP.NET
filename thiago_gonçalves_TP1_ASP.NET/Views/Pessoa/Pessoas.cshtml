@@ -1,0 +1,47 @@
+﻿@model IEnumerable<thiago_gonçalves_TP1_ASP.NET.Models.PessoaModel>
+
+@{
+    ViewData["Title"] = "Pessoas";
+}
+
+<h1>Pessoas</h1>
+
+<p>
+    <a asp-action="AdicionaPessoa">Create New</a>
+</p>
+<form asp-action="BuscarPeloNome">
+    <div class="form-group">
+        <input type="text" name="nome" placeholder="Insira o nome desejado..." class="form-control" required/>
+        <input type="submit" value="Buscar" class="btn btn-outline-primary"/>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataDeAniversario)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataDeAniversario)
+            </td>
+            <td>
+                @Html.ActionLink("EditarPessoa", "EditarPessoa", new { id=item.Id }) |
+                @Html.ActionLink("MostrarPessoa", "MostrarPessoa", new { id = item.Id }) |
+                @Html.ActionLink("DeletarPessoa", "DeletarPessoa", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
