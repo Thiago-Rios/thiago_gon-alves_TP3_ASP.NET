@@ -12,6 +12,7 @@ namespace thiago_gonçalves_TP1_ASP.NET.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public DateTime DataDeAniversario { get; set; }
+        public int DiasRestantes { get; set; }
         public int ProximoAniversario()
         {
             DateTime momento = DateTime.Today;
