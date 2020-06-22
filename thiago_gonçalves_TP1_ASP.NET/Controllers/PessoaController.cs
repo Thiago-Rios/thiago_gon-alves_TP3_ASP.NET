@@ -49,7 +49,7 @@ namespace thiago_gonçalves_TP1_ASP.NET.Controllers
         [Route("Pessoas/Buscar")]
         public ActionResult BuscarPeloNome(string nome)
         {
-            var pessoa = PessoaRepository.GetByName(nome);
+            var pessoa = PessoaRepository.BuscarPorNome(nome);
             return View(pessoa);
         }
 

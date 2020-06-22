@@ -129,7 +129,7 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
             return pessoasOrdenadas.OrderBy(pessoa => pessoa.DiasRestantes).ToList();
         }
 
-        public List<PessoaModel> GetByName(string nome)
+        public List<PessoaModel> BuscarPorNome(string nomePessoa)
         {
             List<PessoaModel> result = new List<PessoaModel>();
 
@@ -146,7 +146,7 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
 
                 SqlCommand sqlCommand = connection.CreateCommand();
                 sqlCommand.CommandText = sql;
-                sqlCommand.Parameters.AddWithValue("P1", nome);
+                sqlCommand.Parameters.AddWithValue("P1", nomePessoa);
 
                 SqlDataReader reader = sqlCommand.ExecuteReader();
 
@@ -158,13 +158,10 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
                         Nome = reader["Nome"].ToString(),
                         DataDeAniversario = Convert.ToDateTime(reader["DataDeAniversario"]),
                     };
-
                     result.Add(pessoa);
                 }
-
                 connection.Close();
             }
-
             return result;
         }
 
