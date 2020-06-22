@@ -22,8 +22,8 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
         {
             using (var connection = new SqlConnection(this.ConnectionString))
             {
-                var sql = @" INSERT INTO Pessoa(Nome, DataDeAniversario, DiasRestantes)
-                             VALUES (@P1, @P2, @P3)
+                var sql = @" INSERT INTO Pessoa(Nome, DataDeAniversario)
+                             VALUES (@P1, @P2)
                 ";
 
                 if (connection.State != System.Data.ConnectionState.Open)
@@ -33,7 +33,6 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
                 sqlCommand.CommandText = sql;
                 sqlCommand.Parameters.AddWithValue("P1", pessoa.Nome);
                 sqlCommand.Parameters.AddWithValue("P2", pessoa.DataDeAniversario);
-                sqlCommand.Parameters.AddWithValue("P3", pessoa.DiasRestantes);
 
                 sqlCommand.ExecuteNonQuery();
 
@@ -94,7 +93,7 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
             using (var connection = new SqlConnection(this.ConnectionString))
             {
 
-                var sql = @" SELECT Id, Nome, DataDeAniversario, DiasRestantes FROM Pessoa";
+                var sql = @" SELECT Id, Nome, DataDeAniversario FROM Pessoa";
 
                 if (connection.State != System.Data.ConnectionState.Open)
                     connection.Open();
@@ -111,7 +110,53 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
                         Id = int.Parse(reader["Id"].ToString()),
                         Nome = reader["Nome"].ToString(),
                         DataDeAniversario = Convert.ToDateTime(reader["DataDeAniversario"]),
-                        DiasRestantes = int.Parse(reader["DiasRestantes"].ToString())
+                    };
+                    pessoa.DiasRestantes = pessoa.ProximoAniversario();
+                    result.Add(pessoa);
+                }
+
+                connection.Close();
+            }
+
+            return result;
+        }
+
+        public List<PessoaModel> ListaOrdenada()
+        {
+
+            var pessoasOrdenadas = GetAll();
+
+            return pessoasOrdenadas.OrderBy(pessoa => pessoa.DiasRestantes).ToList();
+        }
+
+        public List<PessoaModel> GetByName(string nome)
+        {
+            List<PessoaModel> result = new List<PessoaModel>();
+
+            using (var connection = new SqlConnection(this.ConnectionString))
+            {
+
+                var sql = @" SELECT Id, Nome, DataDeAniversario 
+                             FROM Pessoa
+                             WHERE Nome LIKE '%' + @P1 + '%'
+                ";
+
+                if (connection.State != System.Data.ConnectionState.Open)
+                    connection.Open();
+
+                SqlCommand sqlCommand = connection.CreateCommand();
+                sqlCommand.CommandText = sql;
+                sqlCommand.Parameters.AddWithValue("P1", nome);
+
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    PessoaModel pessoa = new PessoaModel()
+                    {
+                        Id = int.Parse(reader["Id"].ToString()),
+                        Nome = reader["Nome"].ToString(),
+                        DataDeAniversario = Convert.ToDateTime(reader["DataDeAniversario"]),
                     };
 
                     result.Add(pessoa);
@@ -130,7 +175,7 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
             using (var connection = new SqlConnection(this.ConnectionString))
             {
 
-                var sql = @" SELECT Id, Nome, DataDeAniversario, DiasRestantes 
+                var sql = @" SELECT Id, Nome, DataDeAniversario
                              FROM Pessoa
                              WHERE Id = @P1
                 ";
@@ -151,7 +196,6 @@ namespace thiago_gonçalves_TP1_ASP.NET.Repository
                         Id = int.Parse(reader["Id"].ToString()),
                         Nome = reader["Nome"].ToString(),
                         DataDeAniversario = DateTime.Parse(reader["DataDeAniversario"].ToString()),
-                        DiasRestantes = int.Parse(reader["DiasRestantes"].ToString())
                     };
 
                     result.Add(pessoa);

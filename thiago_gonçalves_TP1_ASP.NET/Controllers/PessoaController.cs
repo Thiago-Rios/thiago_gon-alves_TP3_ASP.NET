@@ -20,10 +20,20 @@ namespace thiago_gonçalves_TP1_ASP.NET.Controllers
         }
 
         // GET: Pessoa
+        [Route("Pessoas/Aniversariantes")]
+        public ActionResult AniversariantesDoDia()
+        {
+            DateTime dataDeHoje = DateTime.Today;
+            var pessoa = PessoaRepository.GetAll().Where(pessoa => pessoa.DataDeAniversario.Day.Equals(dataDeHoje.Day) && pessoa.DataDeAniversario.Month.Equals(dataDeHoje.Month));
+
+            return View(pessoa);
+        }
+
+        // GET: Pessoa
         [Route("Pessoas/")]
         public ActionResult Pessoas()
         {
-            var pessoa = this.PessoaRepository.GetAll();
+            var pessoa = PessoaRepository.ListaOrdenada();
             return View(pessoa);
         }
 
@@ -36,12 +46,12 @@ namespace thiago_gonçalves_TP1_ASP.NET.Controllers
         }
 
         //GET: Pessoa/Buscar
-        //[Route("Pessoas/Buscar")]
-        //public ActionResult BuscarPeloNome()
-        //{
-        //    var pessoa = pessoas.Where(pessoa => pessoa.Nome.Contains(HttpContext.Request.Form["Nome"], StringComparison.InvariantCultureIgnoreCase));
-        //    return View(pessoa);
-        //}
+        [Route("Pessoas/Buscar")]
+        public ActionResult BuscarPeloNome(string nome)
+        {
+            var pessoa = PessoaRepository.GetByName(nome);
+            return View(pessoa);
+        }
 
         // GET: Pessoa/Create
         [Route("Pessoas/Adiciona")]
@@ -75,10 +85,7 @@ namespace thiago_gonçalves_TP1_ASP.NET.Controllers
         // GET: Pessoa/Edit/5
         [Route("Pessoas/Editar/{id}")]
         public ActionResult EditarPessoa(int id)
-        {
-            if (ModelState.IsValid == false)
-                return View();
-
+        { 
             var pessoa = this.PessoaRepository.GetById(id);
 
             return View(pessoa);
@@ -92,6 +99,9 @@ namespace thiago_gonçalves_TP1_ASP.NET.Controllers
         {
             try
             {
+                if (ModelState.IsValid == false)
+                    return View();
+
                 var pessoaEdit = PessoaRepository.GetById(id);
 
                 pessoaEdit.Nome = pessoa.Nome;

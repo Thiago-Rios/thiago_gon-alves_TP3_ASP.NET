@@ -1,21 +1,15 @@
 ﻿@model IEnumerable<thiago_gonçalves_TP1_ASP.NET.Models.PessoaModel>
 
 @{
-    ViewData["Title"] = "Pessoas";
+    ViewData["Title"] = "AniversariantesDoDia";
 }
 
-<h1>Pessoas</h1>
+<h1>Aniversariantes Do Dia</h1>
 
 <p>
     <a asp-action="AdicionaPessoa">Create New</a> |
-    <a asp-action="AniversariantesDoDia">Veja quais amigos fazem aniversário hoje</a>
+    <a asp-action="Pessoas">Voltar para página principal</a>
 </p>
-<form asp-action="BuscarPeloNome">
-    <div class="form-group">
-        <input type="text" name="nome" placeholder="Insira o nome desejado..." class="form-control" required/>
-        <input type="submit" value="Buscar" class="btn btn-outline-primary"/>
-    </div>
-</form>
 <table class="table">
     <thead>
         <tr>
@@ -29,7 +23,7 @@
                 Data de Aniversário
             </th>
             <th>
-                Dias p/ Próximo Aniversário 
+                Dias p/ Próximo Aniversário
             </th>
         </tr>
     </thead>
